@@ -119,7 +119,7 @@ export function AiAssistant() {
       <Button
         variant="outline"
         size="sm"
-        className="gap-2 border-brand-sky text-brand-sky hover:bg-brand-sky/10"
+        className="gap-2 border-brand-gold text-brand-gold hover:bg-brand-gold/20"
         onClick={() => setOpen(true)}
       >
         <Sparkles className="h-4 w-4" />

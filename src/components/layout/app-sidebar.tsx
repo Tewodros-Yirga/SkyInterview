@@ -30,10 +30,10 @@ export function AppSidebar({ collapsed, className }: AppSidebarProps) {
       <div className="mt-auto rounded-2xl border border-brand-sky/20 bg-brand-sky/5 p-3">
         <p className="text-xs font-medium uppercase text-brand-sky">Next Milestone</p>
         <p className="mt-1 text-sm text-slate-700 dark:text-slate-100">Mock panel prep</p>
-        <button className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-sky hover:text-brand-sky/80">
+        <Link href="/checklists" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-brand-sky hover:text-brand-sky/80">
           View checklist
           <ChevronRight className="h-4 w-4" />
-        </button>
+        </Link>
       </div>
     </aside>
   );

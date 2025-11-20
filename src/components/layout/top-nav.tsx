@@ -78,7 +78,7 @@ export function TopNav({ onMenuToggle, user }: TopNavProps) {
           variant="outline"
           size="sm"
           className={cn(
-            "gap-2 border-brand-sky text-brand-sky hover:bg-brand-sky/10 ",
+            "gap-2 border-brand-gold text-brand-gold hover:bg-brand-gold/20 ",
             loadingSession && "pointer-events-none opacity-70",
           )}
           onClick={handleStartSession}
