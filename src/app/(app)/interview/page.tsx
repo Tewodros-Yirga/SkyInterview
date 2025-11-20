@@ -8,6 +8,14 @@ import { Badge } from "@/components/ui/badge";
 
 const categories = ["HR & Motivation", "Competency (STAR)", "Airline Knowledge", "Technical Rapid Fire"];
 
+type LastSession = {
+  question: string;
+  category: string;
+  total_score: number | null;
+  feedback: string | null;
+  created_at: string;
+};
+
 export default async function InterviewPage() {
   const supabase = await createSupabaseServerClient();
   const {
@@ -15,7 +23,7 @@ export default async function InterviewPage() {
   } = await supabase.auth.getUser();
 
   // Get last session
-  let lastSession = null;
+  let lastSession: LastSession | null = null;
   if (user) {
     const { data } = await supabase
       .from("interview_sessions")
@@ -23,8 +31,11 @@ export default async function InterviewPage() {
       .eq("user_id", user.id)
       .order("created_at", { ascending: false })
       .limit(1)
-      .single();
-    lastSession = data;
+      .maybeSingle();
+    
+    if (data) {
+      lastSession = data as LastSession;
+    }
   }
   return (
     <div className="space-y-10">
@@ -63,7 +74,7 @@ export default async function InterviewPage() {
             {lastSession ? (
               <>
                 <p className="text-sm text-muted-foreground mt-2">
-                  "{lastSession.question}"
+                &quot;{lastSession.question}&quot;
                 </p>
                 {lastSession.category && (
                   <Badge className="mt-2 w-fit bg-brand-sky/20 text-brand-sky border-brand-sky/30">
