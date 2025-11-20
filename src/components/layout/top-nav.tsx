@@ -11,6 +11,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
+import { AiAssistant } from "@/components/ai/assistant-modal";
 
 type TopNavProps = {
   onMenuToggle?: () => void;
@@ -85,6 +86,7 @@ export function TopNav({ onMenuToggle, user }: TopNavProps) {
           <Mic className="h-4 w-4" />
           {loadingSession ? "Preparing..." : "Start Session"}
         </Button>
+        <AiAssistant />
         <ThemeToggle />
         <div className="hidden items-center gap-2 rounded-full border border-slate-200 px-3 py-1 text-xs font-medium text-slate-600 dark:border-slate-800 dark:text-slate-200 md:flex">
           <span>Stage</span>

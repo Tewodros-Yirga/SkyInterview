@@ -72,7 +72,7 @@ export default function DiscussionSession() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, []);
+  }, );
 
   const generateNewTopic = async () => {
     setTopic("AI Captain is preparing your challenge...");
@@ -89,6 +89,7 @@ export default function DiscussionSession() {
     } catch (error) {
       setTopic("The Captain is always right. Agree or Disagree?");
       setSide("for");
+      console.log(error);
     }
   };
 
@@ -127,6 +128,7 @@ export default function DiscussionSession() {
       }, 1000);
     } catch (err) {
       alert("Microphone access denied. Check your browser settings.");
+      console.log(err);
     }
   };
 
@@ -401,7 +403,7 @@ export default function DiscussionSession() {
 
             <div className="bg-amber-50 dark:bg-amber-950/40 rounded-2xl p-8 border-l-4 border-amber-500">
               <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <span className="text-2xl">👮‍♂️</span> Captain's Verdict
+                <span className="text-2xl">👮‍♂️</span> Captain&apos;s Verdict
               </h3>
               <p className="text-lg leading-relaxed whitespace-pre-wrap opacity-90">
                 {feedback.feedback}
