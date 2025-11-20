@@ -3,7 +3,8 @@ import { createServerClient, type CookieOptions } from "@supabase/ssr";
 
 import type { Database } from "./types";
 
-const SESSION_MAX_AGE = 60 * 60 * 2; // 2 hours
+// Session timeout is configured in Supabase Dashboard > Authentication > Settings
+// Default is 1 hour, but can be adjusted up to 1 week
 
 function getPublicConfig() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -27,15 +28,9 @@ export async function createSupabaseServerClient() {
       get(name: string) {
         return cookieStore.get(name)?.value;
       },
-      set(name: string, value: string, options?: CookieOptions) {
-        cookieStore.set({
-          name,
-          value,
-          ...options,
-          maxAge: SESSION_MAX_AGE,
-          path: options?.path ?? "/",
-        });
-      },
+      // Note: set() is omitted to avoid Next.js "cookies can only be modified in Server Actions" errors
+      // Supabase SSR will handle cookie setting automatically in Server Actions/Route Handlers
+      // Session timeout: Configure in Supabase Dashboard > Authentication > Settings > JWT expiry (default: 1 hour)
       remove(name: string, options?: CookieOptions) {
         cookieStore.delete({ name, ...options });
       },

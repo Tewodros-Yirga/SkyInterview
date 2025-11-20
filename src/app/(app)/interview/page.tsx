@@ -72,7 +72,7 @@ export default async function InterviewPage() {
           <CardHeader>
             <CardTitle>Last practiced question</CardTitle>
             {lastSession ? (
-              <>
+              <div>
                 <p className="text-sm text-muted-foreground mt-2">
                 &quot;{lastSession.question}&quot;
                 </p>
@@ -81,7 +81,7 @@ export default async function InterviewPage() {
                     {lastSession.category}
                   </Badge>
                 )}
-              </>
+              </div>
             ) : (
               <p className="text-sm text-muted-foreground mt-2">
                 No practice sessions yet. Start your first interview practice!
@@ -90,7 +90,7 @@ export default async function InterviewPage() {
           </CardHeader>
           <CardContent className="space-y-4 text-sm text-muted-foreground">
             {lastSession ? (
-              <>
+              <div>
                 {lastSession.total_score !== null && (
                   <p>
                     Score:{" "}
@@ -116,7 +116,7 @@ export default async function InterviewPage() {
                     <ArrowRight className="h-4 w-4" />
                   </Link>
                 </Button>
-              </>
+              </div>
             ) : (
               <Button asChild className="gap-2 bg-brand-sky hover:bg-brand-sky/90">
                 <Link href="/interview/session">
