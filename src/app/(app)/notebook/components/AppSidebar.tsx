@@ -1,7 +1,7 @@
 // app/notebook/components/AppSidebar.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Sidebar,
   SidebarContent,
@@ -16,44 +16,52 @@ type NotebookItem = Database["public"]["Tables"]["notebook_pages"]["Row"];
 
 export function AppSidebar() {
   const [items, setItems] = useState<NotebookItem[]>([]);
+  const channelRef = useRef<ReturnType<ReturnType<typeof createSupabaseBrowserClient>["channel"]> | null>(null);
 
   useEffect(() => {
     const supabase = createSupabaseBrowserClient();
+    let isMounted = true;
 
-    const loadItems = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) return;
-
+    const loadItems = async (userId: string) => {
       const { data } = await supabase
         .from("notebook_pages")
         .select("*")
-        .eq("user_id", user.id)
+        .eq("user_id", userId)
         .order("sort_order", { ascending: true });
 
-      setItems(data ?? []);
+      if (isMounted) {
+        setItems(data ?? []);
+      }
     };
 
-    loadItems();
+    const init = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user?.id) return;
 
-    const { data: listener } = supabase
-      .channel("notebook-changes")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "notebook_pages",
-          filter: `user_id=eq.${(async () =>
-            (await supabase.auth.getUser()).data.user?.id)()}`,
-        },
-        () => loadItems()
-      )
-      .subscribe();
+      await loadItems(user.id);
+
+      channelRef.current = supabase
+        .channel("notebook-changes")
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "notebook_pages",
+            filter: `user_id=eq.${user.id}`,
+          },
+          () => loadItems(user.id)
+        )
+        .subscribe();
+    };
+
+    init();
 
     return () => {
-      listener?.unsubscribe();
+      isMounted = false;
+      channelRef.current?.unsubscribe();
     };
   }, []);
 

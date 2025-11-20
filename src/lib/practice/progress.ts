@@ -22,6 +22,7 @@ export type CadetProgress = {
     assigned_side: string;
     created_at: string;
     feedback?: string | null;
+    topic?: string | null;
   };
   latestNotebookEntries: {
     id: string;
@@ -78,7 +79,7 @@ export async function getCadetProgress(userId: string): Promise<CadetProgress> {
       .limit(50),
     supabase
       .from("discussion_sessions")
-      .select("id, assigned_side, feedback, created_at")
+      .select("id, topic_id, assigned_side, feedback, created_at")
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .limit(50),
@@ -171,6 +172,7 @@ export async function getCadetProgress(userId: string): Promise<CadetProgress> {
           assigned_side: discussionData[0].assigned_side ?? "for",
           created_at: discussionData[0].created_at,
           feedback: discussionData[0].feedback,
+          topic: discussionData[0].topic_id,
         }
       : undefined,
     latestNotebookEntries,

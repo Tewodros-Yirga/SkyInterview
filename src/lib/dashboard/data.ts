@@ -74,7 +74,7 @@ export async function getDashboardSummary(userId: string): Promise<DashboardSumm
 
   const discussion: DiscussionHistory = progress.lastDiscussion
     ? {
-        topic: `Side: ${progress.lastDiscussion.assigned_side}`,
+        topic: progress.lastDiscussion.topic ?? `Side: ${progress.lastDiscussion.assigned_side}`,
         practicedAt: new Date(progress.lastDiscussion.created_at).toLocaleString(),
         feedback: progress.lastDiscussion.feedback ?? "Review notes available in discussion history.",
       }

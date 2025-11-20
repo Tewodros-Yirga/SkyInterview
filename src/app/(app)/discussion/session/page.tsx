@@ -239,7 +239,8 @@ export default function DiscussionSession() {
     // 3. Insert
     const { error } = await supabase.from("discussion_sessions").insert({
       user_id: user.id,
-      assigned_side: side,
+      topic_id: result.topic ?? topic,
+      assigned_side: result.side ?? side,
       transcript: result.transcript,
       score: scoreMap, // Stores as JSONB
       feedback: result.feedback,

@@ -5,7 +5,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Highlight from "@tiptap/extension-highlight";
 import Placeholder from "@tiptap/extension-placeholder";
-import { useEffect, useTransition } from "react";
+import { useCallback, useEffect, useRef, useTransition } from "react";
 import { EditorToolbar } from "./EditorToolbar";
 import { updateNote } from "../actions";
 
@@ -17,6 +17,21 @@ type Props = {
 
 export function NotebookEditor({ noteId, initialContent, title }: Props) {
   const [isPending, startTransition] = useTransition();
+  const saveTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const scheduleSave = useCallback(
+    (html: string) => {
+      if (saveTimeout.current) {
+        clearTimeout(saveTimeout.current);
+      }
+      saveTimeout.current = setTimeout(() => {
+        startTransition(() => {
+          updateNote(noteId, html);
+        });
+      }, 800);
+    },
+    [noteId, startTransition],
+  );
 
   const editor = useEditor({
     immediatelyRender: false, // ← THIS FIXES THE SSR ERROR
@@ -39,10 +54,8 @@ export function NotebookEditor({ noteId, initialContent, title }: Props) {
       },
     },
     onUpdate: ({ editor }) => {
-      // Auto-save on every change (debounced by server action)
-      startTransition(() => {
-        updateNote(noteId, editor.getHTML());
-      });
+      // Debounced auto-save on change
+      scheduleSave(editor.getHTML());
     },
   });
 
@@ -52,6 +65,14 @@ export function NotebookEditor({ noteId, initialContent, title }: Props) {
       editor.commands.setContent(initialContent, false);
     }
   }, [initialContent, editor]);
+
+  useEffect(() => {
+    return () => {
+      if (saveTimeout.current) {
+        clearTimeout(saveTimeout.current);
+      }
+    };
+  }, []);
 
   if (!editor) {
     return (

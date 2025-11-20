@@ -30,26 +30,31 @@ function fallbackFeedback(question: string, category: string) {
 
 export async function POST(req: Request) {
   const apiKey = process.env.GEMINI_API_KEY ?? process.env.GOOGLE_API_KEY ?? "";
+  let formData: FormData;
+
+  try {
+    formData = await req.formData();
+  } catch (error) {
+    console.error("Failed to parse form data:", error);
+    return NextResponse.json({ error: "Invalid request payload" }, { status: 400 });
+  }
+
+  const audioFile = formData.get("audio") as File | null;
+  const question = (formData.get("question") as string) || "Unknown question";
+  const category = (formData.get("category") as string) || "Unknown";
+
+  if (!audioFile || audioFile.size === 0) {
+    return NextResponse.json({ error: "No audio detected" }, { status: 400 });
+  }
 
   if (!apiKey) {
     console.warn("Gemini API key missing. Returning fallback feedback.");
-    const formData = await req.formData();
-    const question = (formData.get("question") as string) || "Unknown question";
-    const category = (formData.get("category") as string) || "Unknown";
     return NextResponse.json(fallbackFeedback(question, category));
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
 
   try {
-    const formData = await req.formData();
-    const audioFile = formData.get("audio") as File;
-    const question = (formData.get("question") as string) || "Unknown question";
-    const category = (formData.get("category") as string) || "Unknown";
-
-    if (!audioFile || audioFile.size === 0) {
-      return NextResponse.json({ error: "No audio detected" }, { status: 400 });
-    }
 
     // Convert File to Base64 for Gemini
     const arrayBuffer = await audioFile.arrayBuffer();
@@ -129,9 +134,6 @@ JSON Structure:
     return NextResponse.json(safeData);
   } catch (error) {
     console.error("Judge API Critical Error:", error);
-    const formData = await req.formData();
-    const question = (formData.get("question") as string) || "Unknown question";
-    const category = (formData.get("category") as string) || "Unknown";
     return NextResponse.json(fallbackFeedback(question, category));
   }
 }

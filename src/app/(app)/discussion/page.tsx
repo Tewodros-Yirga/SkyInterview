@@ -1,10 +1,10 @@
 "use client";
 
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Mic } from "lucide-react";
-// Replaced Next.js Link with standard a tag for preview compatibility
-// import Link from "next/link";
+import { History, Mic } from "lucide-react";
 
 export default function DiscussionLobby() {
   return (
@@ -21,16 +21,23 @@ export default function DiscussionLobby() {
           </p>
         </div>
 
-        <div className="pt-8">
-          <a href="/discussion/session">
-            <Button
-              size="lg"
-              className="text-xl px-12 py-8 h-auto gap-4 rounded-full shadow-xl hover:scale-105 transition-transform"
-            >
+        <div className="flex flex-col items-center justify-center gap-4 pt-8 sm:flex-row">
+          <Button
+            asChild
+            size="lg"
+            className="text-xl px-12 py-8 h-auto gap-4 rounded-full shadow-xl hover:scale-105 transition-transform"
+          >
+            <Link href="/discussion/session">
               <Mic className="w-8 h-8" />
               Start New Session
-            </Button>
-          </a>
+            </Link>
+          </Button>
+          <Button asChild variant="outline" size="lg" className="gap-3 border-amber-200 text-amber-900 dark:text-amber-400">
+            <Link href="/discussion/history">
+              <History className="h-5 w-5" />
+              View History
+            </Link>
+          </Button>
         </div>
 
         <p className="text-sm text-muted-foreground">
