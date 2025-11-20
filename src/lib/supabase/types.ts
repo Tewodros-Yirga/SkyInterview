@@ -57,9 +57,11 @@ export interface Database {
           created_at: string
         }
         Insert: {
+          user_id: string
           topic_id?: string | null
           assigned_side: "for" | "against"
           transcript?: string | null
+          audio_url?: string | null
           score?: Json | null
           feedback?: string | null
         }
