@@ -70,7 +70,7 @@ export default async function Home() {
           <div className="mt-8 flex flex-wrap items-center gap-4 text-sm text-slate-500 dark:text-slate-300">
             <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 dark:bg-slate-800">
               <Clock4 className="h-4 w-4 text-brand-sky" />
-              Last session · {summary.interview.practicedAt}
+              Last session · {summary.interview.practicedAt || "No session yet"}
             </span>
             <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 dark:bg-slate-800">
               <BookOpenCheck className="h-4 w-4 text-brand-gold" />
@@ -125,7 +125,9 @@ export default async function Home() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-muted-foreground">
-              Practiced {summary.interview.practicedAt} • {Math.round(summary.interview.durationSeconds / 60)} min session
+              {summary.interview.practicedAt
+                ? `Practiced ${summary.interview.practicedAt}`
+                : "Record your first mock panel to receive feedback."}
             </p>
             <Button asChild variant="ghost" className="justify-start gap-2 text-brand-sky">
               <Link href="/interview">

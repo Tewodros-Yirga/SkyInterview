@@ -1,3 +1,5 @@
+import { getCadetProgress } from "@/lib/practice/progress";
+
 export type DashboardStat = {
   label: string;
   value: string;
@@ -8,7 +10,6 @@ export type PracticeHistory = {
   question: string;
   category: string;
   practicedAt: string;
-  durationSeconds: number;
 };
 
 export type DiscussionHistory = {
@@ -36,43 +37,90 @@ export type DashboardSummary = {
   knowledge: KnowledgeTrack[];
 };
 
-const FALLBACK_SUMMARY: DashboardSummary = {
-  stats: [
-    { label: "Sessions this week", value: "5", change: "+2 vs last week" },
-    { label: "Notebook entries", value: "18", change: "Last update · 2h ago" },
-    { label: "Consistency streak", value: "7 days", change: "Daily cockpit drills" },
-  ],
-  interview: {
-    question: "Walk me through a time you handled an unexpected change during training.",
-    category: "Competency · CRM",
-    practicedAt: "Today · 09:40",
-    durationSeconds: 210,
-  },
-  discussion: {
-    topic: "Balancing assertiveness with crew harmony inside the cockpit",
-    practicedAt: "Yesterday · 18:10",
-    feedback: "Great clarity. Build a stronger closing statement.",
-  },
-  notebook: [
-    {
-      title: "My Strengths",
-      excerpt: "Calm under time pressure, structured STAR communication, strong METAR decoding confidence.",
-    },
-    {
-      title: "Competency Stories",
-      excerpt: "Handled unexpected diversion in simulator by recalculating fuel and briefing crew within 45 seconds.",
-    },
-  ],
-  knowledge: [
-    { title: "Aviation Basics", progress: 70, segment: "Lift & Drag families" },
-    { title: "Ethiopian Airlines Insights", progress: 45, segment: "Fleet + Training pillars" },
-    { title: "ATC Phraseology", progress: 30, segment: "Approach & holding calls" },
-  ],
-};
-
 export async function getDashboardSummary(userId: string): Promise<DashboardSummary> {
-  // Placeholder implementation. When Supabase tables are ready, replace this with real queries.
-  void userId;
-  return FALLBACK_SUMMARY;
+  const progress = await getCadetProgress(userId);
+
+  const stats: DashboardStat[] = [
+    {
+      label: "Sessions this week",
+      value: progress.sessionsThisWeek.toString(),
+      change: progress.streakDays > 0 ? `${progress.streakDays}-day streak` : "Start your streak today",
+    },
+    {
+      label: "Notebook entries",
+      value: progress.notebookCount.toString(),
+      change: progress.latestNotebookEntries[0]
+        ? `Last update · ${new Date(progress.latestNotebookEntries[0].updated_at).toLocaleDateString()}`
+        : "Add your first entry",
+    },
+    {
+      label: "Interview recordings",
+      value: progress.interviewCount.toString(),
+      change: progress.lastInterview ? "Latest session logged" : "No recordings yet",
+    },
+  ];
+
+  const interview: PracticeHistory = progress.lastInterview
+    ? {
+        question: progress.lastInterview.question,
+        category: progress.lastInterview.category,
+        practicedAt: new Date(progress.lastInterview.created_at).toLocaleString(),
+      }
+    : {
+        question: "No interview sessions yet",
+        category: "Start a mock panel",
+        practicedAt: "",
+      };
+
+  const discussion: DiscussionHistory = progress.lastDiscussion
+    ? {
+        topic: `Side: ${progress.lastDiscussion.assigned_side}`,
+        practicedAt: new Date(progress.lastDiscussion.created_at).toLocaleString(),
+        feedback: progress.lastDiscussion.feedback ?? "Review notes available in discussion history.",
+      }
+    : {
+        topic: "No discussion drills yet",
+        practicedAt: "",
+        feedback: "Run a cockpit debate to unlock feedback.",
+      };
+
+  const notebook: NotebookHighlight[] =
+    progress.latestNotebookEntries.length > 0
+      ? progress.latestNotebookEntries.map((entry) => ({
+          title: entry.title,
+          excerpt: entry.excerpt,
+        }))
+      : [
+          {
+            title: "Notebook empty",
+            excerpt: "Start by outlining your strengths and STAR stories.",
+          },
+        ];
+
+  const knowledge: KnowledgeTrack[] = [
+    {
+      title: "Aviation + Airline briefs",
+      progress: Math.min(100, progress.studySectionsCompleted * 15),
+      segment: `${progress.studySectionsCompleted} sections documented`,
+    },
+    {
+      title: "Interview recordings",
+      progress: Math.min(100, progress.interviewCount * 10),
+      segment: `${progress.interviewCount} saved sessions`,
+    },
+    {
+      title: "Discussion drills",
+      progress: Math.min(100, progress.discussionCount * 10),
+      segment: `${progress.discussionCount} debates logged`,
+    },
+  ];
+
+  return {
+    stats,
+    interview,
+    discussion,
+    notebook,
+    knowledge,
+  };
 }
 
