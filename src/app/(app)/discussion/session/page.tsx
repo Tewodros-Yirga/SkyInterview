@@ -239,6 +239,7 @@ export default function DiscussionSession() {
 
       if (error) throw error;
       const { data } = supabase.storage.from("discussion-audio").getPublicUrl(filePath);
+
       return data.publicUrl;
     } catch (error) {
       console.error("Audio upload failed:", error);

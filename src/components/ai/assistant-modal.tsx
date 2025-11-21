@@ -132,68 +132,90 @@ export function AiAssistant() {
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[90vh] flex flex-col pb-6 gap-4">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-semibold">SkyInterview AI Copilot</DialogTitle>
-            <p className="text-sm text-muted-foreground">
-              Ask for interview coaching, aviation knowledge summaries, or help navigating the platform.
-            </p>
-          </DialogHeader>
-
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>AI responses are suggestions—use your judgment.</span>
-            <button className="inline-flex items-center gap-1 text-red-500" onClick={handleClear}>
-              <Trash2 className="h-3.5 w-3.5" />
-              Clear history
-            </button>
-          </div>
-
-          <div className="rounded-2xl border border-slate-200/70 bg-white/80 p-4 dark:border-slate-800 dark:bg-slate-900/60">
-            <p className="text-sm font-semibold text-slate-900 dark:text-white">Capabilities</p>
-            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-              {CAPABILITY_BULLETS.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div ref={scrollAreaRef} className="flex-1 min-h-0">
-            <ScrollArea className="h-full rounded-2xl border border-slate-200/70 dark:border-slate-800">
-              <div className="p-4">
-              {loadingHistory ? (
-                <div className="flex h-full items-center justify-center text-muted-foreground min-h-[200px]">
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Loading history...
+        <DialogContent className="max-h-[90vh] flex flex-col p-0 gap-0">
+          <div className="px-6 pt-6 pb-4 border-b">
+            <DialogHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <DialogTitle className="text-xl font-semibold">SkyInterview AI Copilot</DialogTitle>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Ask for interview coaching, aviation knowledge summaries, or help navigating the platform.
+                  </p>
                 </div>
-              ) : messages.length === 0 ? (
-                <div className="text-center text-sm text-muted-foreground py-8">Ask your first question to start a conversation.</div>
-              ) : (
-                <div className="flex flex-col gap-4">
-                  {messages.map((message, index) => (
-                    <div
-                      key={`${message.role}-${index}-${message.content.slice(0, 8)}`}
-                      className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-                    >
-                      <div
-                        className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words ${
-                          message.role === "user"
-                            ? "bg-brand-sky text-white shadow-lg"
-                            : "bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100"
-                        }`}
-                      >
-                        {message.content}
+                <button 
+                  className="inline-flex items-center gap-1 text-red-500 hover:text-red-600 text-xs"
+                  onClick={handleClear}
+                >
+                  <Trash2 className="h-3.5 w-3.5" />
+                  Clear
+                </button>
+              </div>
+            </DialogHeader>
+          </div>
+
+          {/* Chat Messages Area - Scrollable */}
+          <div ref={scrollAreaRef} className="flex-1 min-h-0 overflow-hidden">
+            <ScrollArea className="h-full">
+              <div className="p-4 min-h-full">
+                {loadingHistory ? (
+                  <div className="flex h-full items-center justify-center text-muted-foreground py-12">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Loading history...
+                  </div>
+                ) : messages.length === 0 ? (
+                  <div className="flex items-center justify-center h-full min-h-[300px]">
+                    <div className="text-center">
+                      <p className="text-sm text-muted-foreground">Ask your first question to start a conversation.</p>
+                      <div className="mt-6 rounded-2xl border border-slate-200/70 bg-white/80 p-4 dark:border-slate-800 dark:bg-slate-900/60 max-w-md mx-auto">
+                        <p className="text-sm font-semibold text-slate-900 dark:text-white mb-2">Capabilities</p>
+                        <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground text-left">
+                          {CAPABILITY_BULLETS.map((item) => (
+                            <li key={item}>{item}</li>
+                          ))}
+                        </ul>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-4 pb-4">
+                    {messages.map((message, index) => (
+                      <div
+                        key={`${message.role}-${index}-${message.content.slice(0, 8)}`}
+                        className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
+                      >
+                        <div
+                          className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words ${
+                            message.role === "user"
+                              ? "bg-brand-sky text-white shadow-lg"
+                              : "bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100"
+                          }`}
+                        >
+                          {message.content === "…" ? (
+                            <div className="flex items-center gap-2">
+                              <Loader2 className="h-3 w-3 animate-spin" />
+                              <span>Thinking...</span>
+                            </div>
+                          ) : (
+                            message.content
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </ScrollArea>
           </div>
 
-          {error ? <p className="text-sm text-red-500">{error}</p> : null}
+          {/* Error Message */}
+          {error ? (
+            <div className="px-6 py-2">
+              <p className="text-sm text-red-500">{error}</p>
+            </div>
+          ) : null}
 
-          <div className="mt-auto pt-4 border-t">
+          {/* Input Area */}
+          <div className="px-6 py-4 border-t">
             <form
               className="flex gap-3"
               onSubmit={(event) => {
