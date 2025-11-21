@@ -47,3 +47,8 @@ export default function DiscussionLobby() {
     </div>
   );
 }
+
+export const metadata = {
+  title: "Aviation discussion | SkyInterview",
+  description: "Master discussion with SkyInterview",
+};

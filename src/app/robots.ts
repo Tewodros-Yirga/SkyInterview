@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: '*',
       allow: '/',
       // Don't waste Google's time trying to crawl private user dashboards
-      disallow: ['/', '/notebook/', '/api/'], 
+      disallow: ['/notebook/', '/api/'], 
     },
     sitemap: 'https://skyinterview.vercel.app/sitemap.xml',
   }

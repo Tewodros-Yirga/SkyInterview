@@ -154,3 +154,7 @@ export default async function InterviewPage() {
   );
 }
 
+export const metadata = {
+  title: "Aviation Interview | SkyInterview",
+  description: "Master interviews with SkyInterview",
+};
