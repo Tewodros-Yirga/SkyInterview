@@ -15,9 +15,13 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "SkyInterview | Pilot Interview Studio",
-  description:
-    "Interview simulator, knowledge hub, and personal prep workspace for Ethiopian Airlines trainee pilots.",
+  description: "The all-in-one platform for Ethiopian Airlines trainee pilot selection. Practice speech-based interviews, group discussions, and master aviation knowledge.",
+  keywords: ["Ethiopian Airlines", "Pilot Interview", "Group Discussion", "Aviation Knowledge", "Cadet Pilot Program"],
+  verification: {
+      google: "87-GTp5D1qpm20UkYjRLECs0iK7ibjOoy7kZyZ_FiRA",
+    },
 };
+
 
 export default function RootLayout({
   children,

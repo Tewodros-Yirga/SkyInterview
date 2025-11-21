@@ -160,3 +160,7 @@ export default function AviationPage() {
     </div>
   );
 }
+export const metadata = {
+  title: "Aviation Knowledge | SkyInterview",
+  description: "Learn the four forces of flight, aerodynamics, and weather basics for your pilot interview.",
+};

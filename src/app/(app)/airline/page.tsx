@@ -120,3 +120,8 @@ export default function AirlinePage() {
     </div>
   );
 }
+
+export const metadata = {
+  title: "Ethiopian Airlines History & Fleet | SkyInterview",
+  description: "Detailed guide on Ethiopian Airlines fleet, vision, mission, and history for interview preparation.",
+};
