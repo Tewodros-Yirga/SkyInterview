@@ -68,11 +68,38 @@ export default function DiscussionSession() {
 
   // 1. LOAD TOPIC ON MOUNT
   useEffect(() => {
-    generateNewTopic();
+    let cancelled = false;
+
+    async function loadTopic() {
+      setTopic("AI Captain is preparing your challenge...");
+      setFeedback(null);
+      setTimeLeft(120);
+      replaceRecordingUrl(null);
+
+      try {
+        const res = await fetch("/api/discussion/generate-topic");
+        if (!res.ok) throw new Error("Network error");
+        const data = await res.json();
+        
+        if (cancelled) return;
+        
+        setTopic(data.topic || "Fallback topic");
+        setSide(data.side || "for");
+      } catch (error) {
+        if (cancelled) return;
+        setTopic("The Captain is always right. Agree or Disagree?");
+        setSide("for");
+        console.error("Error loading topic:", error);
+      }
+    }
+
+    loadTopic();
+
     return () => {
+      cancelled = true;
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, );
+  }, []);
 
   const generateNewTopic = async () => {
     setTopic("AI Captain is preparing your challenge...");
@@ -89,7 +116,7 @@ export default function DiscussionSession() {
     } catch (error) {
       setTopic("The Captain is always right. Agree or Disagree?");
       setSide("for");
-      console.log(error);
+      console.error("Error generating topic:", error);
     }
   };
 

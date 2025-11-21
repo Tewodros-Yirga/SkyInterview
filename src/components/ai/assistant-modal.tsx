@@ -127,7 +127,7 @@ export function AiAssistant() {
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[90vh]">
+        <DialogContent className="max-h-[90vh] flex flex-col pb-6 gap-4">
           <DialogHeader>
             <DialogTitle className="text-xl font-semibold">SkyInterview AI Copilot</DialogTitle>
             <p className="text-sm text-muted-foreground">
@@ -152,7 +152,7 @@ export function AiAssistant() {
             </ul>
           </div>
 
-          <ScrollArea className="h-72 rounded-2xl border border-slate-200/70 p-4 dark:border-slate-800" ref={listRef}>
+          <ScrollArea className="flex-1 min-h-0 rounded-2xl border border-slate-200/70 p-4 dark:border-slate-800" ref={listRef}>
             {loadingHistory ? (
               <div className="flex h-full items-center justify-center text-muted-foreground">
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -184,24 +184,27 @@ export function AiAssistant() {
 
           {error ? <p className="text-sm text-red-500">{error}</p> : null}
 
-          <form
-            className="flex gap-3"
-            onSubmit={(event) => {
-              event.preventDefault();
-              handleSend();
-            }}
-          >
-            <Input
-              placeholder="Ask anything about interviews, discussions, or aviation..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              disabled={sending}
-            />
-            <Button type="submit" disabled={sending || !input.trim()} className="gap-2">
-              {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              Send
-            </Button>
-          </form>
+          <div className="mt-auto pt-4 border-t">
+            <form
+              className="flex gap-3"
+              onSubmit={(event) => {
+                event.preventDefault();
+                handleSend();
+              }}
+            >
+              <Input
+                placeholder="Ask anything about interviews, discussions, or aviation..."
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                disabled={sending}
+                className="flex-1"
+              />
+              <Button type="submit" disabled={sending || !input.trim()} className="gap-2">
+                {sending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                Send
+              </Button>
+            </form>
+          </div>
         </DialogContent>
       </Dialog>
     </>
