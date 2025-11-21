@@ -35,35 +35,43 @@ export default function InterviewHistory() {
   const [selectedSession, setSelectedSession] = useState<InterviewSession | null>(null);
 
   useEffect(() => {
+    let cancelled = false;
+
+    async function loadSessions() {
+      const supabase = createSupabaseBrowserClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        if (!cancelled) setLoading(false);
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from("interview_sessions")
+        .select("*")
+        .eq("user_id", user.id)
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (cancelled) return;
+
+      if (error) {
+        console.error("Error loading sessions:", error);
+        setLoading(false);
+      } else {
+        setSessions((data as InterviewSession[]) || []);
+        setLoading(false);
+      }
+    }
+
     loadSessions();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
-
-  const loadSessions = async () => {
-    const supabase = createSupabaseBrowserClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    if (!user) {
-      setLoading(false);
-      return;
-    }
-
-    const { data, error } = await supabase
-      .from("interview_sessions")
-      .select("*")
-      .eq("user_id", user.id)
-      .order("created_at", { ascending: false })
-      .limit(50);
-
-    if (error) {
-      console.error("Error loading sessions:", error);
-    } else {
-      setSessions((data as InterviewSession[]) || []);
-    }
-
-    setLoading(false);
-  };
 
   const getScoreColor = (score: number | null) => {
     if (!score) return "text-muted-foreground";

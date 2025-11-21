@@ -22,14 +22,16 @@ export default async function NotePage({ params }: Props) {
 
   if (!user) notFound();
 
-  const { data: note } = await supabase
+  const { data: noteData } = await supabase
     .from("notebook_pages")
     .select("id, title, content, updated_at")
     .eq("id", id)
     .eq("user_id", user.id)
     .single();
 
-  if (!note) notFound();
+  if (!noteData) notFound();
+  
+  const note = noteData as { id: string; title: string; content: string | null; updated_at: string };
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8">

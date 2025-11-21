@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { Json } from "@/lib/supabase/types";
 
 export type NotebookTemplate = {
   title: string;
@@ -53,13 +54,22 @@ export async function getNotebookTemplates() {
       return FALLBACK_TEMPLATES;
     }
 
-    return data.map((template) => ({
+    type TemplateRow = {
+      title: string;
+      subtitle: string;
+      description: string;
+      icon: string | null;
+      section: string;
+      tips: Json | null;
+    };
+    
+    return data.map((template: TemplateRow) => ({
       title: template.title,
       subtitle: template.subtitle,
       description: template.description,
       icon: template.icon ?? "/assets/Module Icon — Candidate Notebook.png",
       targetPath: `/notebook/${template.section}`,
-      tips: template.tips ?? [],
+      tips: (Array.isArray(template.tips) ? template.tips : []) as string[],
     }));
   } catch {
     return FALLBACK_TEMPLATES;

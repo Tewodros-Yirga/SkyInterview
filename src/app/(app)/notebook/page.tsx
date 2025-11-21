@@ -1,7 +1,7 @@
 // app/notebook/page.tsx
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, BookmarkPlus, FileText, NotebookTabs } from "lucide-react";
+import { ArrowRight, FileText, NotebookTabs } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,12 +17,22 @@ export default async function NotebookPage() {
 
   if (!user) return null; // Auth pages will redirect
 
-  const { data: recentNotes = [] } = await supabase
+  const { data: recentNotesData } = await supabase
     .from("notebook_pages")
     .select("id, title, updated_at, section, content")
     .eq("user_id", user.id)
     .order("updated_at", { ascending: false })
     .limit(5);
+  
+  type RecentNote = {
+    id: string;
+    title: string;
+    updated_at: string;
+    section: string | null;
+    content: string | null;
+  };
+  
+  const recentNotes: RecentNote[] = (recentNotesData ?? []) as RecentNote[];
 
   // Hardcoded templates (we'll make this dynamic later)
   const templates = [

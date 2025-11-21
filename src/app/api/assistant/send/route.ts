@@ -33,9 +33,21 @@ export async function POST(req: Request) {
 
   const trimmedContent = content.trim();
 
-  const insertUserMessage = await supabase
-    .from("ai_messages")
-    .insert({ user_id: user.id, role: "user", content: trimmedContent })
+  type AIMessageInsert = {
+    user_id: string;
+    role: "user" | "assistant";
+    content: string;
+  };
+
+  const insertUserMessage = await (supabase
+    .from("ai_messages") as unknown as {
+      insert: (values: AIMessageInsert) => {
+        select: (columns: string) => {
+          single: () => Promise<{ data: { id: string; created_at: string } | null; error: Error | null }>;
+        };
+      };
+    })
+    .insert({ user_id: user.id, role: "user" as const, content: trimmedContent })
     .select("id, created_at")
     .single();
 
@@ -44,8 +56,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unable to save your message" }, { status: 500 });
   }
 
-  const { data: history } = await supabase
-    .from("ai_messages")
+  type AIMessageRow = {
+    role: "user" | "assistant";
+    content: string;
+  };
+
+  const { data: history } = await (supabase
+    .from("ai_messages") as unknown as {
+      select: (columns: string) => {
+        eq: (column: string, value: string) => {
+          order: (column: string, options: { ascending: boolean }) => {
+            limit: (count: number) => Promise<{ data: AIMessageRow[] | null; error: Error | null }>;
+          };
+        };
+      };
+    })
     .select("role, content")
     .eq("user_id", user.id)
     .order("created_at", { ascending: true })
@@ -70,8 +95,9 @@ If you don't have the requested data, say so honestly and guide them to the clos
 
   const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash-lite" });
 
+  type HistoryMessage = { role: "user" | "assistant"; content: string };
   const historyParts =
-    history?.map((msg) => ({
+    (history as HistoryMessage[] | null)?.map((msg) => ({
       role: msg.role === "assistant" ? "model" : "user",
       parts: [{ text: sanitizeText(msg.content) }],
     })) ?? [];
@@ -87,9 +113,15 @@ If you don't have the requested data, say so honestly and guide them to the clos
       responseText ||
       "I couldn't generate a helpful answer right now. Please try again in a moment.";
 
-    const insertAssistantMessage = await supabase
-      .from("ai_messages")
-      .insert({ user_id: user.id, role: "assistant", content: answer })
+    const insertAssistantMessage = await (supabase
+      .from("ai_messages") as unknown as {
+        insert: (values: AIMessageInsert) => {
+          select: (columns: string) => {
+            single: () => Promise<{ data: { id: string; created_at: string } | null; error: Error | null }>;
+          };
+        };
+      })
+      .insert({ user_id: user.id, role: "assistant" as const, content: answer })
       .select("id, created_at")
       .single();
 

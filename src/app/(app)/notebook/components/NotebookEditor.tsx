@@ -36,11 +36,7 @@ export function NotebookEditor({ noteId, initialContent, title }: Props) {
   const editor = useEditor({
     immediatelyRender: false, // ← THIS FIXES THE SSR ERROR
     extensions: [
-      StarterKit.configure({
-        history: {
-          depth: 50,
-        },
-      }),
+      StarterKit,
       Highlight,
       Placeholder.configure({
         placeholder: "Start writing your pilot story…",
@@ -62,7 +58,7 @@ export function NotebookEditor({ noteId, initialContent, title }: Props) {
   // Initial content sync (in case of refresh)
   useEffect(() => {
     if (editor && !editor.isDestroyed && editor.getHTML() !== initialContent) {
-      editor.commands.setContent(initialContent, false);
+      editor.commands.setContent(initialContent, { emitUpdate: false });
     }
   }, [initialContent, editor]);
 

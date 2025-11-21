@@ -79,7 +79,7 @@ export async function getCadetProgress(userId: string): Promise<CadetProgress> {
       .limit(50),
     supabase
       .from("discussion_sessions")
-      .select("id, topic_id, assigned_side, feedback, created_at")
+      .select("id, topic_id, assigned_side, feedback, created_at, discussion_topics(topic)")
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .limit(50),
@@ -91,9 +91,34 @@ export async function getCadetProgress(userId: string): Promise<CadetProgress> {
       .limit(10),
   ]);
 
-  const interviewData = interviewRes.data ?? [];
-  const discussionData = discussionRes.data ?? [];
-  const notebookData = notebookRes.data ?? [];
+  type InterviewRow = {
+    id: string;
+    question: string;
+    category: string;
+    total_score: number | null;
+    created_at: string;
+  };
+  
+  type DiscussionRow = {
+    id: string;
+    topic_id: string | null;
+    assigned_side: "for" | "against";
+    feedback: string | null;
+    created_at: string;
+    discussion_topics: { topic: string } | null;
+  };
+  
+  type NotebookRow = {
+    id: string;
+    title: string;
+    content: string | null;
+    section: string | null;
+    updated_at: string;
+  };
+  
+  const interviewData = (interviewRes.data ?? []) as InterviewRow[];
+  const discussionData = (discussionRes.data ?? []) as DiscussionRow[];
+  const notebookData = (notebookRes.data ?? []) as NotebookRow[];
 
   const sessionsThisWeek = [...interviewData, ...discussionData].filter((session: BaseSession) => {
     const created = new Date(session.created_at);
@@ -172,7 +197,7 @@ export async function getCadetProgress(userId: string): Promise<CadetProgress> {
           assigned_side: discussionData[0].assigned_side ?? "for",
           created_at: discussionData[0].created_at,
           feedback: discussionData[0].feedback,
-          topic: discussionData[0].topic_id,
+          topic: discussionData[0].discussion_topics?.topic ?? null,
         }
       : undefined,
     latestNotebookEntries,

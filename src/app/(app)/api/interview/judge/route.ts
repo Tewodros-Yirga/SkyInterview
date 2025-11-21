@@ -7,7 +7,7 @@ function sanitizeJson(text: string): string {
   return text.replace(/```json|```/g, "").trim();
 }
 
-function fallbackFeedback(question: string, category: string) {
+function fallbackFeedback() {
   return {
     transcript: "Audio processing unavailable. Please ensure your microphone is working.",
     totalScore: 50,
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
 
   if (!apiKey) {
     console.warn("Gemini API key missing. Returning fallback feedback.");
-    return NextResponse.json(fallbackFeedback(question, category));
+    return NextResponse.json(fallbackFeedback());
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
@@ -110,22 +110,28 @@ JSON Structure:
     let parsedData;
     try {
       parsedData = JSON.parse(cleanedText);
-    } catch (parseError) {
+    } catch {
       console.error("JSON parse failed:", responseText);
-      parsedData = fallbackFeedback(question, category);
+      parsedData = fallbackFeedback();
     }
 
     // Ensure all required fields exist
+    type ScoreItem = {
+      criteria?: string;
+      score?: number;
+      maxScore?: number;
+    };
+    
     const safeData = {
       transcript: parsedData.transcript || "No transcript available",
       totalScore: typeof parsedData.totalScore === "number" ? parsedData.totalScore : 50,
       scores: Array.isArray(parsedData.scores) && parsedData.scores.length > 0
-        ? parsedData.scores.map((s: any) => ({
+        ? parsedData.scores.map((s: ScoreItem) => ({
             criteria: s.criteria || "Unknown",
             score: typeof s.score === "number" ? s.score : 10,
             maxScore: typeof s.maxScore === "number" ? s.maxScore : 20,
           }))
-        : fallbackFeedback(question, category).scores,
+        : fallbackFeedback().scores,
       feedback: parsedData.feedback || "No feedback provided.",
       improvements: Array.isArray(parsedData.improvements) ? parsedData.improvements : [],
       strengths: Array.isArray(parsedData.strengths) ? parsedData.strengths : [],
@@ -134,7 +140,7 @@ JSON Structure:
     return NextResponse.json(safeData);
   } catch (error) {
     console.error("Judge API Critical Error:", error);
-    return NextResponse.json(fallbackFeedback(question, category));
+    return NextResponse.json(fallbackFeedback());
   }
 }
 

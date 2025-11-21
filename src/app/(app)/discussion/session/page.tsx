@@ -239,7 +239,17 @@ export default function DiscussionSession() {
     }, {});
 
     // 3. Insert
-    const { error } = await supabase.from("discussion_sessions").insert({
+    type DiscussionSessionInsert = {
+      user_id: string;
+      topic_id?: string | null;
+      assigned_side: "for" | "against";
+      transcript?: string | null;
+      score?: Record<string, number> | null;
+      feedback?: string | null;
+      audio_url?: string | null;
+    };
+    
+    const insertData: DiscussionSessionInsert = {
       user_id: user.id,
       topic_id: result.topic ?? topic,
       assigned_side: result.side ?? side,
@@ -247,7 +257,14 @@ export default function DiscussionSession() {
       score: scoreMap, // Stores as JSONB
       feedback: result.feedback,
       audio_url: audioUrl ?? null,
-    } as any); // 'as any' bypasses strict type checks if DB types are outdated
+    };
+    
+    // Use type assertion to work around Supabase type inference limitations
+    const { error } = await (supabase
+      .from("discussion_sessions") as unknown as {
+        insert: (values: DiscussionSessionInsert) => Promise<{ error: Error | null }>;
+      })
+      .insert(insertData);
 
     if (error) console.error("Supabase Insert Error:", error);
   };
