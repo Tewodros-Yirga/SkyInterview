@@ -102,6 +102,16 @@ export default function AirlinePage() {
                     </span>
                   ) : null}
                 </div>
+                <div className="rounded-2xl bg-slate-50/80 p-4 text-sm text-slate-700 dark:bg-slate-800/40 dark:text-slate-200">
+                  <p className="text-xs uppercase tracking-wide text-brand-gold">What you’ll learn</p>
+                  <ul className="mt-2 space-y-2 list-disc pl-5">
+                    {section.topics.slice(0, 3).map((topic) => (
+                      <li key={`${section.id}-${topic.id}`}>
+                        <span className="font-semibold text-slate-900 dark:text-white">{topic.title}:</span> {topic.intro}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </CardContent>
             </Card>
           ))}

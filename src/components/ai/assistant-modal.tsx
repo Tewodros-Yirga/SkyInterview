@@ -34,9 +34,15 @@ export function AiAssistant() {
   const scrollToBottom = () => {
     requestAnimationFrame(() => {
       if (scrollAreaRef.current) {
-        const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;
+        const viewport = scrollAreaRef.current.querySelector(
+          "[data-radix-scroll-area-viewport]",
+        ) as HTMLDivElement | null;
+
         if (viewport) {
-          viewport.scrollTo({ top: viewport.scrollHeight, behavior: "smooth" });
+          viewport.scrollTo({
+            top: viewport.scrollHeight,
+            behavior: "smooth",
+          });
         }
       }
     });
@@ -132,7 +138,8 @@ export function AiAssistant() {
       </Button>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-h-[90vh] flex flex-col p-0 gap-0">
+        <DialogContent className="flex h-[80vh] max-h-[80vh] flex-col p-0 gap-0">
+          {/* Header */}
           <div className="px-6 pt-6 pb-4 border-b">
             <DialogHeader>
               <div className="flex items-center justify-between">
@@ -154,9 +161,9 @@ export function AiAssistant() {
           </div>
 
           {/* Chat Messages Area - Scrollable */}
-          <div ref={scrollAreaRef} className="flex-1 min-h-0 overflow-hidden">
-            <ScrollArea className="h-full">
-              <div className="p-4 min-h-full">
+          <div className="flex-1 min-h-0 border-b">
+            <ScrollArea ref={scrollAreaRef} className="h-full w-full pr-2">
+              <div className="p-4 min-h-full space-y-4">
                 {loadingHistory ? (
                   <div className="flex h-full items-center justify-center text-muted-foreground py-12">
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
