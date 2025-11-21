@@ -116,7 +116,8 @@ export default function AviationPage() {
                   <ul className="mt-2 space-y-2 list-disc pl-5">
                     {section.topics.slice(0, 3).map((topic) => (
                       <li key={`${section.id}-${topic.id}`}>
-                        <span className="font-semibold text-slate-900 dark:text-white">{topic.title}:</span> {topic.intro}
+                        <span className="font-semibold text-slate-900 dark:text-white">{topic.title}:</span>{" "}
+                        {topic.summary}
                       </li>
                     ))}
                   </ul>
