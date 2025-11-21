@@ -1663,6 +1663,225 @@ export const aviationSections: AviationSection[] = [
       }),
     ],
   },
+  {
+    id: "emergencies-failures",
+    title: "Emergency Conditions & Failure Management",
+    summary: "Critical knowledge on handling emergencies, system failures, crash histories, and emergency procedures that every pilot must master.",
+    topics: [
+      makeTopic("emergencies-failures", "emergency-procedures", {
+        title: "Emergency Procedures & Rules",
+        summary: "Standardized emergency protocols ensure consistent, safe responses when systems fail or abnormal situations occur.",
+        description: [
+          "Emergency procedures are standardized checklists designed to be executed under stress. They follow a hierarchy: Aviate (maintain control), Navigate (know where you are), Communicate (inform ATC and crew).",
+          "Critical emergencies require immediate action items (memory items) that pilots must recall without reference. These include engine failures, fires, and loss of pressurization. Non-critical emergencies allow time for checklist reference.",
+          "Ethiopian Airlines and ICAO require pilots to be proficient in emergency procedures through regular simulator training and recurrent checks. Interviewers expect candidates to demonstrate understanding of emergency prioritization.",
+        ],
+        examples: [
+          "During an engine failure on takeoff, the pilot's first action is to maintain aircraft control and establish best glide speed, not to communicate or troubleshoot.",
+          "A fire warning requires immediate engine shutdown and fire suppression, following the memory items before consulting detailed checklists.",
+          "Loss of pressurization above 10,000 feet requires immediate descent to a safe altitude while donning oxygen masks.",
+        ],
+        diagram: "Emergency decision tree: Start with 'Aviate' (control), then 'Navigate' (position), then 'Communicate' (ATC). Branch into memory items vs. checklist items based on severity.",
+        studyPoints: [
+          "Aviate, Navigate, Communicate—this order is non-negotiable.",
+          "Memory items are limited to the most critical actions that must be immediate.",
+          "Emergency checklists are designed for use under stress; they use simple, direct language.",
+          "Crew Resource Management is essential during emergencies; delegate tasks clearly.",
+        ],
+        definitions: [
+          { term: "Memory Items", definition: "Critical emergency actions that must be performed immediately from memory without reference to checklists." },
+          { term: "Emergency Checklist", definition: "Step-by-step procedures for handling emergencies, used after immediate memory items are completed." },
+          { term: "Aviate-Navigate-Communicate", definition: "The priority order in any emergency: first maintain aircraft control, then determine position, then communicate with ATC." },
+        ],
+        misconceptions: [
+          "Thinking all emergencies require immediate action; some allow time for checklist reference.",
+          "Believing communication is the first priority; aircraft control always comes first.",
+        ],
+        quiz: [
+          { question: "What is the correct priority order during an emergency?", answer: "Aviate (maintain control), Navigate (know position), Communicate (inform ATC)." },
+          { question: "What are memory items and when are they used?", answer: "Memory items are critical actions performed immediately from memory for the most severe emergencies like engine failure or fire." },
+        ],
+      }),
+      makeTopic("emergencies-failures", "system-failures", {
+        title: "System Failures & Handling",
+        summary: "Understanding how different aircraft systems can fail and the appropriate responses ensures safe outcomes.",
+        description: [
+          "Aircraft systems are designed with redundancy: multiple engines, dual hydraulic systems, backup electrical generators. When one system fails, others compensate. Pilots must understand which failures are critical versus manageable.",
+          "Engine failures require immediate identification of the failed engine, securing it (fuel, ignition, fire handles), and managing asymmetric thrust. Single-engine operations have specific procedures for climb performance and landing.",
+          "Electrical failures can cascade; pilots must prioritize essential systems (flight instruments, radios, navigation) and shed non-essential loads. Battery time is limited, so quick action is essential.",
+          "Hydraulic failures affect flight controls, landing gear, and brakes. Modern aircraft have multiple hydraulic systems; complete loss is rare but requires immediate landing at the nearest suitable airport.",
+        ],
+        examples: [
+          "An engine fire on a twin-engine aircraft: identify the engine, shut it down, activate fire suppression, and prepare for single-engine approach and landing.",
+          "Electrical failure: prioritize essential avionics, communicate with ATC using remaining power, and plan for immediate landing before battery depletion.",
+          "Landing gear malfunction: follow abnormal gear extension procedures, which may include manual extension or landing with gear up if extension fails.",
+        ],
+        diagram: "System redundancy diagram: Show primary and backup systems for engines, hydraulics, and electrical. Highlight which failures are critical (red) vs. manageable (yellow).",
+        studyPoints: [
+          "Redundancy is built into critical systems; understand what backups exist.",
+          "Engine failures require immediate action to prevent asymmetric thrust issues.",
+          "Electrical failures have time limits; prioritize and act quickly.",
+          "Hydraulic failures affect flight controls; know your aircraft's backup systems.",
+        ],
+        definitions: [
+          { term: "Asymmetric Thrust", definition: "Unequal thrust from engines, requiring rudder input to maintain directional control, especially critical during single-engine operations." },
+          { term: "Single-Engine Service Ceiling", definition: "The maximum altitude at which an aircraft can maintain level flight with one engine inoperative." },
+          { term: "Essential Bus", definition: "Electrical bus that powers critical flight instruments and systems, prioritized during electrical emergencies." },
+        ],
+        misconceptions: [
+          "Assuming all system failures require immediate landing; some can be managed en route.",
+          "Believing redundancy means no action is needed; failures still require appropriate responses.",
+        ],
+        quiz: [
+          { question: "What is the first action after identifying an engine failure?", answer: "Maintain aircraft control, establish best glide or single-engine climb speed, then secure the failed engine." },
+          { question: "During an electrical failure, what systems should be prioritized?", answer: "Essential flight instruments, navigation equipment, and communication radios." },
+        ],
+      }),
+      makeTopic("emergencies-failures", "crash-histories", {
+        title: "Notable Aviation Accidents & Lessons Learned",
+        summary: "Studying historical accidents reveals patterns, human factors, and systemic improvements that shaped modern aviation safety.",
+        description: [
+          "Aviation accidents are thoroughly investigated by bodies like the NTSB (US), AAIB (UK), and national authorities. Findings lead to regulatory changes, training improvements, and system redesigns. Understanding these lessons demonstrates safety awareness in interviews.",
+          "The Tenerife Airport disaster (1977) involved two 747s colliding on a foggy runway, killing 583 people. Key lessons: communication clarity, CRM importance, and runway incursion prevention. This led to standardized ATC phraseology and mandatory CRM training.",
+          "United Airlines Flight 232 (1989) lost all hydraulic systems after an engine failure. The crew used differential thrust to control the aircraft and performed a crash landing. This highlighted the importance of crew coordination and thinking outside standard procedures.",
+          "Air France Flight 447 (2009) crashed into the Atlantic due to pilot error during a stall recovery. The investigation revealed automation dependency, loss of basic flying skills, and CRM breakdown. This led to renewed emphasis on manual flying and stall recovery training.",
+          "Ethiopian Airlines Flight 302 (2019) involved a Boeing 737 MAX crash due to MCAS system issues. This highlighted the importance of understanding automated systems, proper training on new aircraft systems, and regulatory oversight.",
+        ],
+        examples: [
+          "Tenerife: Miscommunication and pressure to depart led to runway collision; modern CRM training addresses these human factors.",
+          "Flight 232: Crew's innovative use of engine thrust to control aircraft without hydraulics demonstrated exceptional airmanship and CRM.",
+          "Flight 447: Stall recovery confusion showed the critical need for maintaining basic flying skills alongside automation proficiency.",
+        ],
+        diagram: "Timeline of major accidents with key lessons: Tenerife (1977) → CRM, Flight 232 (1989) → Crew coordination, Flight 447 (2009) → Manual flying skills, 737 MAX (2019) → System understanding.",
+        studyPoints: [
+          "Accidents are rarely caused by a single factor; they result from chains of events.",
+          "Human factors (communication, decision-making, stress) are often contributing factors.",
+          "Each major accident led to specific safety improvements still in use today.",
+          "Understanding these cases shows interviewers you value safety and continuous learning.",
+        ],
+        definitions: [
+          { term: "Chain of Events", definition: "A series of linked factors that lead to an accident, where breaking any link could have prevented the outcome." },
+          { term: "Human Factors", definition: "The study of how human performance, limitations, and behavior affect aviation safety." },
+          { term: "CRM", definition: "Crew Resource Management—the effective use of all available resources (crew, equipment, information) to achieve safe flight operations." },
+        ],
+        misconceptions: [
+          "Believing accidents are always due to pilot error; most involve multiple contributing factors.",
+          "Thinking studying accidents is morbid; it's essential for understanding safety evolution.",
+        ],
+        quiz: [
+          { question: "What major safety improvement resulted from the Tenerife accident?", answer: "Standardized ATC phraseology, improved CRM training, and runway incursion prevention programs." },
+          { question: "What lesson did Flight 447 teach the aviation industry?", answer: "The critical importance of maintaining basic flying skills and stall recovery proficiency, even with advanced automation." },
+        ],
+      }),
+      makeTopic("emergencies-failures", "emergency-landings", {
+        title: "Emergency Landings & Ditching Procedures",
+        summary: "Procedures for landing at alternate airports, off-airport landings, and water ditching when normal operations aren't possible.",
+        description: [
+          "Emergency landings are categorized: precautionary (time available to select a suitable field), forced (immediate landing required due to engine failure), and ditching (landing on water). Each has specific procedures and priorities.",
+          "Precautionary landings allow time to assess the situation, communicate with ATC, select the best available landing area, and prepare passengers. The goal is to land while you still have control, not after you've lost it.",
+          "Forced landings require immediate action: establish best glide speed, select landing area (consider wind, obstacles, terrain), configure aircraft (gear, flaps as appropriate), and execute landing. Communication is secondary to aircraft control.",
+          "Water ditching requires specific techniques: landing parallel to swells, maintaining control until the last moment, securing cabin, and immediate evacuation. Survival equipment (life vests, rafts) must be accessible and passengers briefed.",
+        ],
+        examples: [
+          "Precautionary landing: Engine running rough but still producing power; pilot selects nearest suitable airport, declares emergency, and lands normally with emergency services standing by.",
+          "Forced landing: Complete engine failure; pilot establishes glide, selects a field, lands gear-up if terrain is soft, and evacuates immediately.",
+          "Ditching: Engine failure over water; pilot lands parallel to swells, maintains control, secures cabin, and initiates immediate evacuation with life vests and rafts.",
+        ],
+        diagram: "Decision tree: Emergency situation → Assess time available → Precautionary (time) vs. Forced (immediate) → Land on ground vs. Water → Execute appropriate procedures.",
+        studyPoints: [
+          "Precautionary landings are proactive; forced landings are reactive.",
+          "Best glide speed maximizes distance and time for decision-making.",
+          "Water landings require different techniques than ground landings.",
+          "Passenger briefing and cabin security are critical before emergency landings.",
+        ],
+        definitions: [
+          { term: "Best Glide Speed", definition: "The airspeed that provides the maximum glide distance for a given altitude, typically found in aircraft operating manuals." },
+          { term: "Precautionary Landing", definition: "A landing made when there is concern about continuing flight, but time is available to select a suitable landing area." },
+          { term: "Forced Landing", definition: "An immediate landing required due to an inability to continue flight, such as complete engine failure." },
+          { term: "Ditching", definition: "A controlled emergency landing on water, requiring specific techniques and immediate evacuation procedures." },
+        ],
+        misconceptions: [
+          "Thinking you must always land at an airport; suitable fields can be safer in emergencies.",
+          "Believing gear should always be extended; terrain may require gear-up landing.",
+        ],
+        quiz: [
+          { question: "What is the difference between a precautionary and forced landing?", answer: "Precautionary landing allows time to select a suitable area and prepare; forced landing requires immediate action due to inability to continue flight." },
+          { question: "What is best glide speed and why is it important?", answer: "Best glide speed maximizes distance and time available, giving pilots more options for selecting a landing area during engine failure." },
+        ],
+      }),
+      makeTopic("emergencies-failures", "fire-emergencies", {
+        title: "Fire Emergencies & Smoke Management",
+        summary: "Fire is one of the most critical emergencies; rapid identification, containment, and landing are essential.",
+        description: [
+          "Aircraft fires are categorized: engine fires, electrical fires, cabin fires, and cargo fires. Each requires specific procedures, but all share the priority of immediate landing at the nearest suitable airport.",
+          "Engine fire warnings require immediate action: shut down the affected engine, activate fire suppression systems, and prepare for single-engine operations. If fire persists, prepare for emergency landing.",
+          "Electrical fires may produce smoke in the cockpit. Pilots must don oxygen masks, identify and isolate the source, and land as soon as possible. Smoke evacuation procedures vary by aircraft type.",
+          "Cabin fires require immediate passenger notification, fire source identification, use of fire extinguishers, and emergency landing. Flight attendants are trained in firefighting; pilots coordinate from the cockpit.",
+          "Cargo fires are particularly dangerous due to limited access. Procedures include depressurization to reduce oxygen, fire suppression systems, and immediate landing.",
+        ],
+        examples: [
+          "Engine fire on takeoff: Pilot shuts down engine, activates fire suppression, declares emergency, and returns for immediate landing with fire trucks standing by.",
+          "Electrical fire producing smoke: Crew dons oxygen, isolates electrical systems, communicates with ATC, and lands at nearest airport with emergency services alerted.",
+          "Cabin fire: Flight attendants use extinguishers, pilots coordinate landing, passengers are briefed, and aircraft lands with fire services ready.",
+        ],
+        diagram: "Fire emergency flowchart: Fire warning → Identify source (engine/electrical/cabin/cargo) → Execute specific procedures → Prepare for immediate landing → Coordinate with ATC and emergency services.",
+        studyPoints: [
+          "All fires require immediate landing; there is no 'manage en route' option.",
+          "Engine fire procedures are memory items; know them perfectly.",
+          "Smoke in cockpit requires immediate oxygen mask use.",
+          "Coordination with cabin crew is essential for cabin fires.",
+        ],
+        definitions: [
+          { term: "Fire Suppression System", definition: "Aircraft systems designed to extinguish fires, typically using Halon or similar agents, activated automatically or manually." },
+          { term: "Smoke Evacuation", definition: "Procedures to remove smoke from the aircraft cabin or cockpit, which may include depressurization and ventilation techniques." },
+        ],
+        misconceptions: [
+          "Thinking fires can be managed while continuing flight; all fires require immediate landing.",
+          "Believing all fires are the same; different fire types require different procedures.",
+        ],
+        quiz: [
+          { question: "What is the first action when an engine fire warning appears?", answer: "Shut down the affected engine and activate fire suppression systems immediately." },
+          { question: "What should pilots do if smoke appears in the cockpit?", answer: "Don oxygen masks immediately, identify and isolate the source, and prepare for immediate landing." },
+        ],
+      }),
+      makeTopic("emergencies-failures", "emergency-facts", {
+        title: "Critical Emergency Facts & Statistics",
+        summary: "Key facts, statistics, and principles that every pilot should know about aviation emergencies and safety.",
+        description: [
+          "Aviation is statistically one of the safest modes of transportation. According to ICAO, the global accident rate for commercial aviation is approximately 1 accident per 5.4 million flights. However, when emergencies occur, proper training and procedures are critical.",
+          "The 'Golden Hour' principle: Most aviation accidents occur during takeoff and landing phases (first and last 10 minutes of flight). This is why extra vigilance and preparation are emphasized during these phases.",
+          "Survivability statistics: Studies show that most aircraft accidents are survivable when proper procedures are followed. Evacuation within 90 seconds significantly improves survival rates, which is why cabin crew training emphasizes rapid evacuation.",
+          "Human factors in emergencies: Stress, time pressure, and information overload can degrade performance. Training and checklists are designed to maintain performance under stress. CRM helps distribute workload.",
+          "Ethiopian Airlines maintains an excellent safety record and invests heavily in training, modern aircraft, and safety systems. The airline's commitment to safety is reflected in its training programs and operational procedures.",
+        ],
+        examples: [
+          "Statistics show that engine failures are rare but manageable; modern twin-engine aircraft can safely operate on one engine.",
+          "The majority of emergency landings result in no injuries when proper procedures are followed.",
+          "Cabin fires are more common than aircraft fires but are typically contained quickly with proper procedures and equipment.",
+        ],
+        diagram: "Safety statistics visualization: Show accident rates by phase of flight (takeoff/landing vs. cruise), survivability rates with proper procedures, and improvement trends over time.",
+        studyPoints: [
+          "Aviation safety has improved dramatically over decades due to lessons learned from accidents.",
+          "Most emergencies are survivable when proper procedures are followed.",
+          "Training and preparation are the keys to handling emergencies effectively.",
+          "Understanding statistics helps maintain perspective while respecting risks.",
+        ],
+        definitions: [
+          { term: "Golden Hour", definition: "The principle that most aviation accidents occur during takeoff and landing phases, emphasizing extra vigilance during these critical periods." },
+          { term: "Survivability", definition: "The likelihood of surviving an aircraft accident, which is significantly improved by proper procedures and rapid evacuation." },
+          { term: "Accident Rate", definition: "The statistical measure of accidents per number of flights, used to track aviation safety trends." },
+        ],
+        misconceptions: [
+          "Believing all emergencies are fatal; most are manageable with proper procedures.",
+          "Thinking statistics mean accidents won't happen; they emphasize the importance of preparation.",
+        ],
+        quiz: [
+          { question: "What is the 'Golden Hour' principle in aviation?", answer: "The concept that most accidents occur during takeoff and landing phases, requiring extra vigilance during these periods." },
+          { question: "Why is rapid evacuation important during emergencies?", answer: "Evacuation within 90 seconds significantly improves survival rates in aircraft accidents." },
+        ],
+      }),
+    ],
+  },
 ];
 
 // Additional sections (structure, systems, instruments, etc.) would follow

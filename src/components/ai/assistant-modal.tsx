@@ -29,11 +29,16 @@ export function AiAssistant() {
   const [sending, setSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const initializedRef = useRef(false);
-  const listRef = useRef<HTMLDivElement | null>(null);
+  const scrollAreaRef = useRef<HTMLDivElement | null>(null);
 
   const scrollToBottom = () => {
     requestAnimationFrame(() => {
-      listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: "smooth" });
+      if (scrollAreaRef.current) {
+        const viewport = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]') as HTMLDivElement;
+        if (viewport) {
+          viewport.scrollTo({ top: viewport.scrollHeight, behavior: "smooth" });
+        }
+      }
     });
   };
 
@@ -152,35 +157,39 @@ export function AiAssistant() {
             </ul>
           </div>
 
-          <ScrollArea className="flex-1 min-h-0 rounded-2xl border border-slate-200/70 p-4 dark:border-slate-800" ref={listRef}>
-            {loadingHistory ? (
-              <div className="flex h-full items-center justify-center text-muted-foreground">
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Loading history...
-              </div>
-            ) : messages.length === 0 ? (
-              <div className="text-center text-sm text-muted-foreground">Ask your first question to start a conversation.</div>
-            ) : (
-              <div className="flex flex-col gap-4">
-                {messages.map((message, index) => (
-                  <div
-                    key={`${message.role}-${index}-${message.content.slice(0, 8)}`}
-                    className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
-                  >
+          <div ref={scrollAreaRef} className="flex-1 min-h-0">
+            <ScrollArea className="h-full rounded-2xl border border-slate-200/70 dark:border-slate-800">
+              <div className="p-4">
+              {loadingHistory ? (
+                <div className="flex h-full items-center justify-center text-muted-foreground min-h-[200px]">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Loading history...
+                </div>
+              ) : messages.length === 0 ? (
+                <div className="text-center text-sm text-muted-foreground py-8">Ask your first question to start a conversation.</div>
+              ) : (
+                <div className="flex flex-col gap-4">
+                  {messages.map((message, index) => (
                     <div
-                      className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed ${
-                        message.role === "user"
-                          ? "bg-brand-sky text-white shadow-lg"
-                          : "bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100"
-                      }`}
+                      key={`${message.role}-${index}-${message.content.slice(0, 8)}`}
+                      className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
                     >
-                      {message.content}
+                      <div
+                        className={`max-w-[85%] rounded-2xl px-4 py-3 text-sm leading-relaxed whitespace-pre-wrap break-words ${
+                          message.role === "user"
+                            ? "bg-brand-sky text-white shadow-lg"
+                            : "bg-slate-100 text-slate-900 dark:bg-slate-800 dark:text-slate-100"
+                        }`}
+                      >
+                        {message.content}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              )}
               </div>
-            )}
-          </ScrollArea>
+            </ScrollArea>
+          </div>
 
           {error ? <p className="text-sm text-red-500">{error}</p> : null}
 
